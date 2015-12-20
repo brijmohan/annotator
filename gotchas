@@ -1,0 +1,3 @@
+- if a word is surrounded by quotes("", ''), then it does not get selected on clicking next. To select the word go further and click 'previous'
+- should be able to apply previously tagged data
+- should be able to select and tag
