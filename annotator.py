@@ -5,6 +5,7 @@ import sys
 from annotator_auto import Ui_Dialog
 import os, datetime
 import imp
+import codecs
 
 class Editor(QtGui.QMainWindow):
 
@@ -83,7 +84,7 @@ class Editor(QtGui.QMainWindow):
         self.ui.label.setText(self.inpfile)
         #self.outfile = "%s/%s_%d%d%d%d%d%d.mzXML" % (os.path.dirname(self.inpfile),os.path.splitext(os.path.basename(self.inpfile))[0],self.now.year, self.now.month, self.now.day, self.now.hour, self.now.minute, self.now.second)
         if self.inpfile != '':
-            self.filetext = open(self.inpfile).read().strip()
+            self.filetext = codecs.open(self.inpfile, "r", "utf-8").read().strip()#.encode('UTF-8')
             self.textlen = len(self.filetext)
             self.ui.textEdit.setText(self.filetext)
 
@@ -117,12 +118,12 @@ class Editor(QtGui.QMainWindow):
                 self.cursor.movePosition(QtGui.QTextCursor.NextWord, 0)
             self.cursor.movePosition(QtGui.QTextCursor.EndOfWord, 1)
             
-            self.sel_text = self.cursor.selectedText()
+            self.sel_text = unicode(self.cursor.selectedText()).encode('utf8')
             
             self.cpos = self.cursor.position()
             #self.ui.textEdit.textCursor().setPosition(self.cpos, 0)
-            #print self.sel_text
-            if self.sel_text == '' or not str(self.sel_text).isalnum():
+            print self.sel_text
+            if self.sel_text == '':# or not self.sel_text.isalnum():
                 #self.cursor.movePosition(QtGui.QTextCursor.NextWord, 0)
                 self.highlightNext()
             self.cursor.mergeCharFormat(self.highlightformat)
@@ -147,9 +148,10 @@ class Editor(QtGui.QMainWindow):
             self.cursor.movePosition(QtGui.QTextCursor.PreviousWord, 0)
             self.cursor.movePosition(QtGui.QTextCursor.EndOfWord, 1)
             
-            self.sel_text = self.cursor.selectedText()
+            #self.sel_text = self.cursor.selectedText()
+            self.sel_text = unicode(self.cursor.selectedText()).encode('utf8')
             #print self.sel_text
-            if self.sel_text == ''  or not str(self.sel_text).isalnum():
+            if self.sel_text == '':#  or not str(self.sel_text).isalnum():
                 self.cpos = self.cursor.position()
                 self.highlightPrev()
 
